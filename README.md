@@ -1,7 +1,5 @@
 # 🏥 MedCore HMS - Premium Hospital Management System
 
-![Banner](https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6)
-
 ## 🌟 Overview
 
 MedCore HMS is a sophisticated, high-performance Hospital Management System engineered with **Angular 21**, **Tailwind CSS**, and **RxJS**. Designed for modern healthcare facilities, it bridges the gap between complex medical workflows and a seamless user experience. By leveraging **Angular Signals**, the application provides real-time reactivity, ensuring that clinical data and patient records are always synchronized across the platform.
