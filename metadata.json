@@ -1,0 +1,5 @@
+{
+  "name": "MedCore HMS",
+  "description": "A modern, role-based Hospital Management System featuring patient records, doctor scheduling, appointment management, billing, and AI-powered medical assistance.",
+  "requestFramePermissions": []
+}
