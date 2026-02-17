@@ -69,13 +69,13 @@ import { CommonModule } from '@angular/common';
           </div>
 
           <div class="flex items-center gap-6">
-            <div class="flex items-center gap-4 px-4 py-2 bg-slate-50 rounded-2xl border border-slate-100/50">
+            <a routerLink="/app/profile" class="flex items-center gap-4 px-4 py-2 bg-slate-50 rounded-2xl border border-slate-100/50 hover:bg-slate-100 transition-all cursor-pointer">
               <div class="text-right hidden sm:block">
                 <div class="text-sm font-bold text-slate-800 leading-tight">{{ auth.currentUser()?.name }}</div>
                 <div class="text-[10px] font-bold text-primary uppercase tracking-widest mt-0.5">{{ auth.currentUser()?.role }}</div>
               </div>
               <img [src]="auth.currentUser()?.avatar" class="w-11 h-11 rounded-xl border-2 border-white shadow-sm object-cover bg-white">
-            </div>
+            </a>
           </div>
         </header>
 
@@ -98,7 +98,8 @@ export class LayoutComponent {
     { label: 'Patients', path: '/app/patients', icon: 'fa-solid fa-hospital-user', roles: ['Admin', 'Doctor', 'Nurse', 'Receptionist'] },
     { label: 'Doctors', path: '/app/doctors', icon: 'fa-solid fa-user-doctor', roles: ['Admin', 'Doctor', 'Nurse', 'Receptionist', 'Patient'] },
     { label: 'Appointments', path: '/app/appointments', icon: 'fa-solid fa-calendar-check', roles: ['Admin', 'Doctor', 'Nurse', 'Receptionist', 'Patient'] },
-    { label: 'Billing', path: '/app/billing', icon: 'fa-solid fa-file-invoice-dollar', roles: ['Admin', 'Receptionist', 'Patient'] }
+    { label: 'Billing', path: '/app/billing', icon: 'fa-solid fa-file-invoice-dollar', roles: ['Admin', 'Receptionist', 'Patient'] },
+    { label: 'Settings', path: '/app/settings', icon: 'fa-solid fa-gear', roles: ['Admin', 'Doctor', 'Nurse', 'Receptionist', 'Patient'] }
   ];
 
   toggleSidebar() {

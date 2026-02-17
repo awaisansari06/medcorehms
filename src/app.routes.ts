@@ -14,12 +14,16 @@ const authGuard = () => {
   return auth.isAuthenticated() || false;
 };
 
+import { ProfileComponent } from './components/profile.component';
+import { SettingsComponent } from './components/settings.component';
+import { NotFoundComponent } from './components/not-found.component';
+
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { 
-    path: 'app', 
-    component: LayoutComponent, // Changed from loadComponent(AppComponent) to direct LayoutComponent
+  {
+    path: 'app',
+    component: LayoutComponent,
     canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -27,7 +31,10 @@ export const routes: Routes = [
       { path: 'patients', component: PatientsComponent },
       { path: 'doctors', component: DoctorsComponent },
       { path: 'appointments', component: AppointmentsComponent },
-      { path: 'billing', component: BillingComponent }
+      { path: 'billing', component: BillingComponent },
+      { path: 'profile', component: ProfileComponent },
+      { path: 'settings', component: SettingsComponent }
     ]
-  }
+  },
+  { path: '**', component: NotFoundComponent }
 ];

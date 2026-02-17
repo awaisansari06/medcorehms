@@ -93,7 +93,7 @@ import { CommonModule } from '@angular/common';
             </div>
             
             <div class="px-10 pb-10">
-              <div class="flex flex-col sm:flex-row gap-6 -mt-12 items-end sm:items-center">
+              <div class="flex flex-col sm:flex-row gap-6 -mt-10 items-end sm:items-center z-10 relative">
                 <div class="w-32 h-32 rounded-3xl bg-white border-8 border-white shadow-lg flex items-center justify-center text-4xl font-bold text-primary">
                   {{ selectedPatient()?.name.charAt(0) }}
                 </div>

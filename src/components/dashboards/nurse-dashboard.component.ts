@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
 
 @Component({
-    selector: 'app-nurse-dashboard',
-    standalone: true,
-    imports: [CommonModule],
-    template: `
+  selector: 'app-nurse-dashboard',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       <div class="bg-white p-8 rounded-3xl shadow-soft border border-slate-100 border-l-8 border-l-danger">
         <div class="text-slate-400 text-xs font-black uppercase tracking-widest mb-2">Critical Alerts</div>
@@ -59,7 +59,7 @@ import { DataService } from '../../services/data.service';
                    </div>
                 </td>
                 <td class="px-6 py-5">
-                   <button class="bg-slate-800 text-white text-[10px] font-black px-4 py-2 rounded-xl uppercase tracking-widest hover:bg-primary transition-all">Log Vitals</button>
+                   <button (click)="openVitalsModal(patient)" class="bg-slate-800 text-white text-[10px] font-black px-4 py-2 rounded-xl uppercase tracking-widest hover:bg-primary transition-all">Log Vitals</button>
                 </td>
               </tr>
             }
@@ -70,12 +70,59 @@ import { DataService } from '../../services/data.service';
         </table>
       </div>
     </div>
+
+    @if (selectedPatient) {
+      <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in shadow-2xl">
+        <div class="bg-white rounded-3xl w-full max-w-md overflow-hidden animate-slide-up border border-slate-100 p-8 shadow-2xl">
+          <div class="flex justify-between items-center mb-6">
+            <div>
+              <h3 class="font-bold text-xl text-slate-800">Log Vitals</h3>
+              <p class="text-xs text-slate-500 font-bold uppercase mt-1">For {{ selectedPatient?.name }}</p>
+            </div>
+            <button (click)="selectedPatient = null" class="w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-400 flex items-center justify-center transition-colors">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          
+          <div class="space-y-4">
+             <div>
+               <label class="block text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2">Blood Pressure</label>
+               <input type="text" placeholder="120/80" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm font-bold text-slate-800 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none">
+             </div>
+             <div>
+               <label class="block text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2">Heart Rate (BPM)</label>
+               <input type="number" placeholder="72" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm font-bold text-slate-800 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none">
+             </div>
+             <div>
+               <label class="block text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2">Temperature (°C)</label>
+               <input type="number" placeholder="36.6" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm font-bold text-slate-800 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none">
+             </div>
+          </div>
+
+          <div class="mt-8 flex gap-3">
+             <button (click)="selectedPatient = null" class="flex-1 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-widest text-slate-400 hover:bg-slate-50 transition-colors">Cancel</button>
+             <button (click)="saveVitals()" class="flex-1 bg-primary text-white py-3.5 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-blue-700 transition-all shadow-lg shadow-blue-100">Save Log</button>
+          </div>
+        </div>
+      </div>
+    }
   `
 })
 export class NurseDashboardComponent {
-    dataService = inject(DataService);
+  dataService = inject(DataService);
+  selectedPatient: any = null;
 
-    get admittedPatients() {
-        return this.dataService.patients().filter(p => p.admitted);
-    }
+  get admittedPatients() {
+    return this.dataService.patients().filter(p => p.admitted);
+  }
+
+  openVitalsModal(patient: any) {
+    this.selectedPatient = patient;
+  }
+
+  saveVitals() {
+    // Here we would call dataService to save
+    this.selectedPatient = null;
+    alert('Vitals logged successfully');
+  }
 }
