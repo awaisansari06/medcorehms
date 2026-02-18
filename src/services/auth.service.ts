@@ -59,8 +59,12 @@ export class AuthService {
         break;
     }
 
-    this.currentUser.set(mockUser);
-    localStorage.setItem('medcore_user', JSON.stringify(mockUser));
+    this.loginUser(mockUser);
+  }
+
+  loginUser(user: User) {
+    this.currentUser.set(user);
+    localStorage.setItem('medcore_user', JSON.stringify(user));
     this.router.navigate(['/app/dashboard']);
   }
 
