@@ -85,15 +85,15 @@ import { CommonModule } from '@angular/common';
       <!-- Profile Modal -->
       @if (selectedPatient()) {
         <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in shadow-2xl">
-          <div class="bg-white rounded-3xl w-full max-w-2xl overflow-hidden animate-slide-up border border-slate-100 shadow-2xl">
-            <div class="relative h-32 bg-gradient-to-r from-primary to-blue-400">
+          <div class="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-slide-up border border-slate-100 shadow-2xl">
+            <div class="relative h-32 shrink-0 bg-linear-to-r from-primary to-blue-400">
               <button (click)="selectedPatient.set(null)" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center backdrop-blur-md transition-all">
                 <i class="fa-solid fa-xmark"></i>
               </button>
             </div>
             
-            <div class="px-10 pb-10">
-              <div class="flex flex-col sm:flex-row gap-6 -mt-10 items-end sm:items-center z-10 relative">
+            <div class="px-10 pb-10 overflow-y-auto custom-scrollbar">
+              <div class="flex flex-col sm:flex-row gap-6 -mt-10 items-end sm:items-center z-10 relative shrink-0">
                 <div class="w-32 h-32 rounded-3xl bg-white border-8 border-white shadow-lg flex items-center justify-center text-4xl font-bold text-primary">
                   {{ selectedPatient()?.name.charAt(0) }}
                 </div>
@@ -156,14 +156,14 @@ import { CommonModule } from '@angular/common';
       <!-- Add Modal -->
       @if (showModal) {
         <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in shadow-2xl">
-          <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-slide-up border border-slate-100">
-            <div class="px-8 py-6 border-b border-slate-100 flex justify-between items-center bg-white">
+          <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden animate-slide-up border border-slate-100">
+            <div class="px-8 py-6 border-b border-slate-100 flex justify-between items-center bg-white shrink-0">
               <h3 class="font-bold text-xl text-slate-800">Register New Patient</h3>
               <button (click)="closeModal()" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-100 text-slate-400 transition-colors">
                 <i class="fa-solid fa-xmark"></i>
               </button>
             </div>
-            <div class="p-8 space-y-5">
+            <div class="p-8 space-y-5 overflow-y-auto custom-scrollbar">
               <div class="grid grid-cols-2 gap-5">
                 <div>
                   <label class="block text-xs font-bold uppercase text-slate-400 mb-2 ml-1">Full Name</label>
@@ -197,7 +197,7 @@ import { CommonModule } from '@angular/common';
                 <label for="admitted" class="text-sm font-semibold text-slate-700">Admit to Hospital Immediately</label>
               </div>
             </div>
-            <div class="px-8 py-6 bg-white flex justify-end gap-3 border-t border-slate-100">
+            <div class="px-8 py-6 bg-white flex justify-end gap-3 border-t border-slate-100 shrink-0">
               <button (click)="closeModal()" class="px-6 py-3 text-sm font-bold text-slate-500 hover:bg-slate-50 rounded-2xl transition-all">Cancel</button>
               <button (click)="savePatient()" class="px-8 py-3 text-sm font-bold text-white bg-primary hover:bg-primary-hover rounded-2xl transition-all shadow-lg shadow-blue-100">Save Record</button>
             </div>
@@ -240,9 +240,16 @@ export class PatientsComponent {
     this.selectedPatient.set(patient);
   }
 
-  savePatient() {
-    if (!this.newPatient.name) return; // Simple validation
-    this.dataService.addPatient(this.newPatient);
-    this.closeModal();
+  async savePatient() {
+    try {
+      if (!this.newPatient.name) return; // Simple validation
+      console.log('Attempting to save patient:', this.newPatient);
+      await this.dataService.addPatient(this.newPatient);
+      console.log('Patient saved successfully');
+      this.closeModal();
+    } catch (e) {
+      console.error('Error saving patient:', e);
+      alert('Error saving patient: ' + (e as Error).message);
+    }
   }
 }

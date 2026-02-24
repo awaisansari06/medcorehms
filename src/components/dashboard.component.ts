@@ -2,9 +2,6 @@ import { Component, inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { AdminDashboardComponent } from './dashboards/admin-dashboard.component';
-import { DoctorDashboardComponent } from './dashboards/doctor-dashboard.component';
-import { NurseDashboardComponent } from './dashboards/nurse-dashboard.component';
-import { ReceptionistDashboardComponent } from './dashboards/receptionist-dashboard.component';
 import { PatientDashboardComponent } from './dashboards/patient-dashboard.component';
 
 @Component({
@@ -13,9 +10,6 @@ import { PatientDashboardComponent } from './dashboards/patient-dashboard.compon
   imports: [
     CommonModule,
     AdminDashboardComponent,
-    DoctorDashboardComponent,
-    NurseDashboardComponent,
-    ReceptionistDashboardComponent,
     PatientDashboardComponent
   ],
   template: `
@@ -23,7 +17,7 @@ import { PatientDashboardComponent } from './dashboards/patient-dashboard.compon
       <!-- Common Header -->
       <div class="flex flex-col md:flex-row justify-between md:items-center gap-6">
         <div>
-          <h2 class="text-3xl font-bold text-slate-800 tracking-tight">{{ auth.currentUser()?.role }} Overview</h2>
+          <h2 class="text-3xl font-bold text-slate-800 tracking-tight">{{ auth.currentUser()?.role === 'Admin' ? 'Hospital Head' : auth.currentUser()?.role }} Overview</h2>
           <p class="text-slate-500 mt-1">Welcome back, {{ auth.currentUser()?.name }}</p>
         </div>
         <div class="flex items-center gap-3">
@@ -36,9 +30,6 @@ import { PatientDashboardComponent } from './dashboards/patient-dashboard.compon
       <!-- Role Based Content Orchestrator -->
       @switch (auth.currentUser()?.role) {
         @case ('Admin') { <app-admin-dashboard /> }
-        @case ('Doctor') { <app-doctor-dashboard /> }
-        @case ('Nurse') { <app-nurse-dashboard /> }
-        @case ('Receptionist') { <app-receptionist-dashboard /> }
         @case ('Patient') { <app-patient-dashboard /> }
       }
     </div>

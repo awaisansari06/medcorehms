@@ -1,18 +1,26 @@
 import { Component, inject, signal } from '@angular/core';
 import { DataService } from '../services/data.service';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../services/auth.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-doctors',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="space-y-6 animate-fade-in px-4 sm:px-0">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-           <h2 class="text-3xl font-bold text-slate-800 tracking-tight">Medical Staff</h2>
-           <p class="text-slate-500 mt-1">Directory of our professional healthcare providers.</p>
+           <h2 class="text-3xl font-bold text-slate-800 tracking-tight">Staff Management</h2>
+           <p class="text-slate-500 mt-1">Medical professionals currently managed under Hospital Head administration.</p>
         </div>
+        
+        @if (auth.currentUser()?.role !== 'Patient') {
+          <button (click)="openAddDoctorModal()" class="bg-primary hover:bg-primary-hover text-white px-5 py-2.5 rounded-xl shadow-lg shadow-blue-100 transition-all flex items-center gap-2 font-medium">
+            <i class="fa-solid fa-plus"></i> Add Doctor
+          </button>
+        }
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -51,18 +59,20 @@ import { CommonModule } from '@angular/common';
         }
       </div>
 
-      <!-- Doctor Profile Modal -->
-      @if (selectedDoctor()) {
-        <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in shadow-2xl">
-          <div class="bg-white rounded-3xl w-full max-w-2xl overflow-hidden animate-slide-up border border-slate-100 shadow-2xl">
-            <div class="relative h-40 bg-gradient-to-br from-primary to-blue-500">
+    </div>
+
+    <!-- Doctor Profile Modal -->
+    @if (selectedDoctor()) {
+        <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex justify-center p-4 sm:p-6 animate-fade-in shadow-2xl overflow-y-auto">
+          <div class="bg-white rounded-3xl w-full max-w-2xl m-auto flex flex-col overflow-hidden animate-slide-up border border-slate-100 shadow-2xl shrink-0">
+            <div class="relative h-40 shrink-0 bg-gradient-to-br from-primary to-blue-500">
               <button (click)="selectedDoctor.set(null)" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center backdrop-blur-md transition-all">
                 <i class="fa-solid fa-xmark"></i>
               </button>
             </div>
             
-            <div class="px-10 pb-10">
-              <div class="flex flex-col sm:flex-row gap-6 -mt-16 items-end sm:items-center">
+            <div class="px-10 pb-10 overflow-y-auto custom-scrollbar">
+              <div class="flex flex-col sm:flex-row gap-6 -mt-16 items-end sm:items-center shrink-0">
                 <img [src]="'https://ui-avatars.com/api/?name=' + selectedDoctor()?.name + '&background=ffffff&color=2563eb&bold=true&size=128'" 
                    class="w-32 h-32 rounded-3xl bg-white border-8 border-white shadow-lg object-cover">
                 <div class="flex-1 pb-2">
@@ -126,14 +136,80 @@ import { CommonModule } from '@angular/common';
           </div>
         </div>
       }
-    </div>
+
+      <!-- Add Doctor Modal -->
+      @if (showAddModal) {
+        <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex justify-center p-4 sm:p-6 animate-fade-in shadow-2xl overflow-y-auto">
+          <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg m-auto flex flex-col overflow-hidden animate-slide-up border border-slate-100 shrink-0">
+            <div class="px-8 py-6 border-b border-slate-100 flex justify-between items-center bg-white shrink-0">
+              <h3 class="font-bold text-xl text-slate-800">Register New Doctor</h3>
+              <button (click)="closeAddDoctorModal()" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-100 text-slate-400 transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            <div class="p-8 space-y-5 overflow-y-auto custom-scrollbar flex-1 min-h-0">
+              <div>
+                <label class="block text-xs font-bold uppercase text-slate-400 mb-2 ml-1">Full Name</label>
+                <input [(ngModel)]="newDoctor.name" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all">
+              </div>
+              <div>
+                <label class="block text-xs font-bold uppercase text-slate-400 mb-2 ml-1">Specialization</label>
+                <input [(ngModel)]="newDoctor.specialization" type="text" placeholder="e.g., Cardiologist" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all">
+              </div>
+              <div>
+                <label class="block text-xs font-bold uppercase text-slate-400 mb-2 ml-1">Department</label>
+                <input [(ngModel)]="newDoctor.department" type="text" placeholder="e.g., Cardiology" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all">
+              </div>
+              <div class="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                <input [(ngModel)]="newDoctor.available" type="checkbox" id="available" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300">
+                <label for="available" class="text-sm font-semibold text-slate-700">Available immediately</label>
+              </div>
+            </div>
+            <div class="px-8 py-6 bg-white flex justify-end gap-3 border-t border-slate-100 shrink-0">
+              <button (click)="closeAddDoctorModal()" class="px-6 py-3 text-sm font-bold text-slate-500 hover:bg-slate-50 rounded-2xl transition-all">Cancel</button>
+              <button (click)="saveDoctor()" class="px-8 py-3 text-sm font-bold text-white bg-primary hover:bg-primary-hover rounded-2xl transition-all shadow-lg shadow-blue-100">Save Record</button>
+            </div>
+          </div>
+        </div>
+      }
   `
 })
 export class DoctorsComponent {
   dataService = inject(DataService);
+  auth = inject(AuthService);
   selectedDoctor = signal<any | null>(null);
+
+  showAddModal = false;
+  newDoctor: any = {
+    name: '',
+    specialization: '',
+    department: '',
+    available: true
+  };
 
   viewProfile(doctor: any) {
     this.selectedDoctor.set(doctor);
+  }
+
+  openAddDoctorModal() {
+    this.newDoctor = { name: '', specialization: '', department: '', available: true };
+    this.showAddModal = true;
+  }
+
+  closeAddDoctorModal() {
+    this.showAddModal = false;
+  }
+
+  async saveDoctor() {
+    try {
+      if (!this.newDoctor.name || !this.newDoctor.specialization) return;
+      console.log('Attempting to save doctor:', this.newDoctor);
+      await this.dataService.addDoctor(this.newDoctor);
+      console.log('Doctor saved successfully');
+      this.closeAddDoctorModal();
+    } catch (e) {
+      console.error('Error saving doctor:', e);
+      alert('Error saving doctor: ' + (e as Error).message);
+    }
   }
 }

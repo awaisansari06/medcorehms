@@ -4,10 +4,10 @@ import { RouterLink } from '@angular/router';
 import { DataService } from '../../services/data.service';
 
 @Component({
-    selector: 'app-admin-dashboard',
-    standalone: true,
-    imports: [CommonModule, RouterLink],
-    template: `
+  selector: 'app-admin-dashboard',
+  standalone: true,
+  imports: [CommonModule, RouterLink],
+  template: `
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <div class="bg-white p-5 rounded-3xl shadow-soft border border-slate-100 flex items-center card-hover group">
         <div class="w-12 h-12 rounded-2xl bg-blue-50 text-primary flex items-center justify-center mr-3 text-xl transition-colors group-hover:bg-primary group-hover:text-white shrink-0"><i class="fa-solid fa-users"></i></div>
@@ -19,7 +19,7 @@ import { DataService } from '../../services/data.service';
       <div class="bg-white p-5 rounded-3xl shadow-soft border border-slate-100 flex items-center card-hover group">
         <div class="w-12 h-12 rounded-2xl bg-green-50 text-success flex items-center justify-center mr-3 text-xl transition-colors group-hover:bg-success group-hover:text-white shrink-0"><i class="fa-solid fa-user-doctor"></i></div>
         <div class="min-w-0">
-          <div class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1 truncate">Medical Staff</div>
+          <div class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1 truncate">Managed Doctors</div>
           <div class="text-2xl font-bold text-slate-800 leading-none truncate">{{ dataService.doctors().length }}</div>
         </div>
       </div>
@@ -106,9 +106,9 @@ import { DataService } from '../../services/data.service';
   `
 })
 export class AdminDashboardComponent {
-    dataService = inject(DataService);
+  dataService = inject(DataService);
 
-    get recentAppointments() {
-        return this.dataService.appointments().slice(0, 5);
-    }
+  get recentAppointments() {
+    return this.dataService.appointments().slice(0, 5);
+  }
 }

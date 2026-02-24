@@ -1,68 +1,105 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  body {
-    @apply font-sans bg-white text-slate-800 antialiased h-screen overflow-hidden selection:bg-primary/20 selection:text-primary;
-  }
+/* Base Styles replaced from @layer base */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f8fafc;
+  /* light */
+  color: #1e293b;
+  /* dark */
+  height: 100vh;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-@layer components {
-  .glass-effect {
-    @apply bg-white/95 backdrop-blur-md border border-slate-100;
-  }
+/* Glass Effect */
+.glass-effect {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid #f1f5f9;
+}
 
-  .card-hover {
-    @apply transition-all duration-200 border border-slate-100 hover:border-primary/20 hover:shadow-soft hover:-translate-y-0.5;
-  }
+/* Card Hover */
+.card-hover {
+  transition: all 0.2s ease;
+  border: 1px solid #f1f5f9;
+}
+
+.card-hover:hover {
+  border-color: rgba(37, 99, 235, 0.2);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
 }
 
 /* Dark Mode Overrides */
 html.dark body {
-  @apply bg-slate-900 text-slate-100;
+  background-color: #0f172a;
+  /* slate-900 */
+  color: #f1f5f9;
+  /* slate-100 */
 }
+
 html.dark .bg-white {
-  @apply bg-slate-800 border-slate-700;
+  background-color: #1e293b;
+  /* slate-800 */
+  border-color: #334155;
+  /* slate-700 */
 }
+
 html.dark .bg-slate-50 {
-  @apply bg-slate-800/50;
+  background-color: rgba(30, 41, 59, 0.5);
+  /* slate-800/50 */
 }
+
 html.dark .text-slate-800 {
-  @apply text-slate-100;
+  color: #f1f5f9;
+  /* slate-100 */
 }
+
 html.dark .text-slate-700 {
-  @apply text-slate-300;
+  color: #cbd5e1;
+  /* slate-300 */
 }
+
 html.dark .text-slate-500 {
-  @apply text-slate-400;
+  color: #94a3b8;
+  /* slate-400 */
 }
+
 html.dark .border-slate-100 {
-  @apply border-slate-700;
+  border-color: #334155;
+  /* slate-700 */
 }
+
 html.dark .shadow-soft {
-  @apply shadow-none;
+  box-shadow: none;
 }
 
 /* Compact Mode Overrides */
 body.compact-mode .p-8 {
   padding: 1rem !important;
 }
+
 body.compact-mode .p-6 {
   padding: 0.75rem !important;
 }
+
 body.compact-mode .gap-6 {
   gap: 0.75rem !important;
 }
+
 body.compact-mode .gap-8 {
   gap: 1rem !important;
 }
+
 body.compact-mode .text-3xl {
   font-size: 1.5rem !important;
 }
+
 body.compact-mode .text-2xl {
   font-size: 1.25rem !important;
 }
+
 body.compact-mode .rounded-3xl {
   border-radius: 1rem !important;
 }
